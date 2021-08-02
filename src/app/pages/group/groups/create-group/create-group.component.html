@@ -1,0 +1,80 @@
+
+<div class="form-container" fxFlexFill fxLayoutAlign="start "  fxLayout="column">
+  <form nz-form [formGroup]="groupForm" id="ngForm" #detailForm="ngForm" (ngSubmit)="submitForm(groupForm.value) ">
+    <div class="controles-container">
+      <nz-form-item>
+        <nz-form-label   [nzSm]="24" [nzMd]="24" [nzLg]="6"  nzRequired>Group Name</nz-form-label>
+        <nz-form-control  [nzSm]="24" [nzMd]="24" [nzLg]="14" nzHasFeedback nzValidatingTip="Validating..."  [nzErrorTip]="groupNameErrorTpl">
+          <input nz-input formControlName="groupName" placeholder="Enter the Group Name" type="text" />
+          <ng-template #groupNameErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">Group Name is Required</ng-container>
+            <ng-container *ngIf="control.hasError('duplicated')">The Name is redundant!</ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label  [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired>Description</nz-form-label>
+        <nz-form-control   [nzSm]="24" [nzMd]="24" [nzLg]="14" nzErrorTip="Please write something here!">
+          <textarea formControlName="description" nz-input rows="2" placeholder="description of group"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item  >
+        <nz-form-label  [nzSm]="24" [nzMd]="24" [nzLg]="6" >Search</nz-form-label>
+        <nz-form-control  [nzSm]="24" [nzMd]="24" [nzLg]="14" nzSearch>
+            <input (input)="onChange($event)" nz-input formControlName="search" placeholder="Search for Candidate" [nzAutocomplete]="auto"/>
+        </nz-form-control>
+      </nz-form-item>
+
+    </div>
+  </form>
+
+<div class="list-cadidate-container" fxLayout="row"  fxFlex="auto" nz-row>
+  <div nz-col [nzSm]="0" [nzMd]="0" [nzLg]="6"></div>
+  <cdk-virtual-scroll-viewport nz-col itemSize="50" class="scrollable" fxFlex="auto" [nzSm]="24" [nzMd]="24" [nzLg]="14">
+    <nz-list nzItemLayout="horizontal" >
+      <nz-list-header>
+        <nz-list-item-meta
+          nzDescription= "List of Candidates ">
+        </nz-list-item-meta>
+      </nz-list-header>
+      <nz-list-empty *ngIf="listOfSelectedCandidate.length === 0"></nz-list-empty>
+      <nz-list-item *ngFor="let item of listOfSelectedCandidate">
+        <nz-list-item-meta
+          nzAvatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+          nzDescription={{item?.email}}
+        >
+          <nz-list-item-meta-title>
+            {{ item.firtName }}
+          </nz-list-item-meta-title>
+        </nz-list-item-meta>
+        <ul nz-list-item-actions>
+          <nz-list-item-action ><a (click)="removeCandidteFromList(item)"><i nz-icon nzType="close" nzTheme="outline"></i></a></nz-list-item-action>
+        </ul>
+      </nz-list-item>
+    </nz-list>
+  </cdk-virtual-scroll-viewport>
+
+</div>
+<div fxLayout="row"  fxLayoutAlign="end end">
+    <button id="cancecl-btn" nz-button (click)="close()">Cancel</button>
+    <button nz-button (click)="resetForm($event)">Reset</button>
+    <button nz-button nzType="primary" [disabled]="!groupForm.valid" form="ngForm" value="Save" (click)="detailForm.ngSubmit.emit('Save')">Submit</button>
+</div>
+</div>
+
+<nz-autocomplete #auto>
+  <nz-list nzItemLayout="horizontal"  [style.display]="groupForm.get('search')?.value =='' || filteredCadidate.length === 0 ? 'none': 'block'" [nzLoading]="false">
+  <nz-auto-option class="global-search-item" *ngFor="let item of  filteredCadidate" [nzValue]="''">
+      <nz-list-item (click)="selectCandidate(item)">
+        <nz-list-item-meta
+          nzAvatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+          nzDescription={{item?.email}}>
+          <nz-list-item-meta-title>
+             {{ item.firtName }}
+          </nz-list-item-meta-title>
+        </nz-list-item-meta>
+      </nz-list-item>
+      <nz-list-empty *ngIf="filteredCadidate.length === 0"></nz-list-empty>
+    </nz-auto-option>
+  </nz-list>
+</nz-autocomplete>

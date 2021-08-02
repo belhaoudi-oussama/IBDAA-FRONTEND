@@ -1,0 +1,76 @@
+.headerTableButton{
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: -4px -8px -4px 4px;
+    padding: 0 4px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.headerTableContainer{
+    display: flex;
+}
+.headerTableTitle{
+    position: relative;
+    z-index: 1;
+    flex: 1;
+}
+.headerTableButton i{
+    font-size: 12px ;
+    color: #bfbfbf;
+}
+.ant-btn:hover ,.ant-dropdown-trigger:focus i{
+    color: #1890ff;
+}
+.headerTableButton:focus i{
+    color: #1890ff;
+}
+.search-box {
+    padding: 8px;
+  }
+
+  .search-box input {
+    width: 188px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .search-box button {
+    width: 90px;
+  }
+
+  .search-button {
+    margin-right: 8px;
+  }
+  .rowElement{
+      margin-bottom: 50px;
+  }
+  .addSpan{
+        margin-bottom: 20px;
+        min-width: 700px;
+  }
+.rowContainer{
+}
+.test{
+    min-width: 700px;
+}
+.first-row-items{
+    flex: 0,0,auto;
+    margin-left: auto;
+    margin-bottom: 20px;
+}
+
+.scrollable {
+    height: 200px;
+    width: 100%;
+}
+.filter-field{
+    width :300px;
+    height: 100%;
+}
+.divider{
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 50%;
+}

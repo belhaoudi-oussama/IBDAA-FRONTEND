@@ -1,0 +1,97 @@
+<div class="rowContainer" nz-row >
+  <div class="addSpan" nz-col nzSpan="24"  fxLayout="row" fxLayoutAlign="end center">
+    <form (submit)="mainFilter()" action="#">
+      <nz-input-group [nzSuffix]="suffixIconSearch" class="filter-field">
+        <input type="text" nz-input placeholder="input search text" />
+      </nz-input-group>
+      <ng-template #suffixIconSearch>
+        <button nz-button nzType="link" type="submit" ><i nz-icon nzType="search"></i></button>
+      </ng-template>
+    </form>
+      <nz-divider class="divider" nzType="vertical"></nz-divider>
+      <button  nz-button nzType="primary" [nzSize]="size" (click)="openCreateGroupComponent()"><i nz-icon nzType="usergroup-add" nzTheme="outline"></i></button>
+</div>
+<div nz-row>
+    <div nz-col nzSpan="0"></div>
+    <div nz-col nzSpan="24" class="test">
+        <nz-table #nzTable [nzData]="listOfDisplayData" nzBordered nzTableLayout="fixed" nzShowSizeChanger nzShowPagination nzSize="middle" >
+            <thead>
+              <tr>
+                <th [nzSortFn]="listOfColumns[0].sortFn" [(nzSortOrder)]="listOfColumns[0].sortOrder" [nzSortPriority]="listOfColumns[0].priority">
+                  <div class="headerTableContainer" >
+                    <span class="headerTableTitle">Name</span>
+                    <span class="headerTableButton"><button  nz-button nzTrigger="click" nz-dropdown nzType="text" [nzDropdownMenu]="menu" nzPlacement="bottomRight" (click)="setFilterField('name')"><i nz-icon nzType="search" ></i></button></span>
+                  </div>
+                </th>
+                <th [nzSortFn]="listOfColumns[1].sortFn" [(nzSortOrder)]="listOfColumns[1].sortOrder" [nzSortPriority]="listOfColumns[1].priority">
+                  <div class="headerTableContainer">
+                    <span class="headerTableTitle">Description</span>
+                    <span class="headerTableButton"><button  nz-button nzTrigger="click" nz-dropdown nzType="text" [nzDropdownMenu]="menu1" nzPlacement="bottomRight" (click)="setFilterField('description')"><i nz-icon nzType="search"></i></button></span>
+                  </div>
+                </th>
+                <th [nzSortFn]="listOfColumns[2].sortFn" [(nzSortOrder)]="listOfColumns[2].sortOrder" [nzSortPriority]="listOfColumns[2].priority">
+                  <div class="headerTableContainer">
+                    <span class="headerTableTitle">Number of Candidate</span>
+                    <span class="headerTableButton"><button  nz-button nzTrigger="click" nz-dropdown nzType="text" [nzDropdownMenu]="menu2" nzPlacement="bottomRight" (click)="setFilterField('numberOfCandidate')"><i nz-icon nzType="search"></i></button></span>
+                  </div>
+                </th>
+                <th nzWidth="130px">
+                  <div class="headerTableContainer" >
+                    <span class="headerTableTitle">Actions</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let data of nzTable.data">
+                <tr>
+                  <td>{{ data.name }}</td>
+                  <td nzEllipsis>{{ data.description }}</td>
+                  <td class="expandableTableCol" [nzExpand]="expandSet.has(data.id)" (nzExpandChange)="onExpandChange(data.id, $event)">
+                    {{ data.candidates.length }}
+                  </td>
+                  <td>
+                    <button nz-button [nzSize]="size" nzType="link" (click)="openEditGroupComponent(data.id)"><i nz-icon nzType="edit" nzTheme="outline"></i></button>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <button nz-button [nzSize]="size" nzType="link" nzDanger><i nz-icon nzType="delete" nzTheme="outline" ></i></button>
+                    
+                  </td>
+                </tr>
+                <tr [nzExpand]="expandSet.has(data.id)">
+                  <cdk-virtual-scroll-viewport itemSize="50" class="scrollable">
+                    <app-candidates-list [candidates]="data.candidates"></app-candidates-list>
+                  </cdk-virtual-scroll-viewport>
+                </tr>
+              </ng-container>
+            </tbody>
+        </nz-table>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <div class="ant-table-filter-dropdown">
+            <div class="search-box">
+              <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" />
+              <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
+              <button nz-button nzSize="small" (click)="reset()">Reset</button>
+            </div>
+          </div>
+        </nz-dropdown-menu>
+        <nz-dropdown-menu #menu1="nzDropdownMenu">
+          <div class="ant-table-filter-dropdown">
+            <div class="search-box">
+              <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" />
+              <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
+              <button nz-button nzSize="small" (click)="reset()">Reset</button>
+            </div>
+          </div>
+        </nz-dropdown-menu>
+        <nz-dropdown-menu #menu2="nzDropdownMenu">
+          <div class="ant-table-filter-dropdown">
+            <div class="search-box">
+              <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" />
+              <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
+              <button nz-button nzSize="small" (click)="reset()">Reset</button>
+            </div>
+          </div>
+        </nz-dropdown-menu>
+    </div>
+    <div nz-col nzSpan="0"></div>
+</div>
