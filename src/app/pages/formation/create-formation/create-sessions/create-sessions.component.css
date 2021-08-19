@@ -1,0 +1,25 @@
+.login-form {
+    max-width: 300px;
+  }
+
+  .login-form-margin {
+    margin-bottom: 16px;
+  }
+
+  .login-form-forgot {
+    float: right;
+  }
+
+  .login-form-button {
+    width: 100%;
+  }
+  .nz-date-picker{
+    margin: 0 8px 12px 0;
+  }
+  .nz-select {
+    width: 100%;
+  }
+
+  .loading-icon {
+    margin-right: 8px;
+  }

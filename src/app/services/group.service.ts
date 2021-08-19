@@ -17,5 +17,8 @@ export class GroupService {
     return this.http.get<IGroup[]>(`${this.groupApi}/${id}`);
   }
   
+  getGroupsNames() : Observable<string[]>{
+    return this.http.get<string[]>(`${this.groupApi}/getGroupeNames`)
+  }
   
 }

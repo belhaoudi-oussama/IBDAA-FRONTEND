@@ -70,10 +70,13 @@ import { NzResizableModule } from 'ng-zorro-antd/resizable';
 import { NzPipesModule } from 'ng-zorro-antd/pipes';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
   exports: [
+    FormsModule,
+    ReactiveFormsModule,
     NzAffixModule,
     NzAlertModule,
     NzAnchorModule,

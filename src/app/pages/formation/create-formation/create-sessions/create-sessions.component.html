@@ -1,1 +1,111 @@
+<div class="form-container" fxFlexFill fxLayoutAlign="start "  fxLayout="column">
+<form nz-form [formGroup]="validateForm" id="ngForm" >
+    <div class="controles-container">  
+    <nz-form-item>
+      <nz-form-label [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired nzFor="nom">Nom de sceance</nz-form-label>
+      <nz-form-control [nzSm]="24" [nzMd]="24" [nzLg]="14" nzErrorTip="Nom de sceance est requis !">
+        <input nz-input formControlName="nom" id="nom" />
+      </nz-form-control>
+    </nz-form-item>
+    <!-- <nz-form-item>
+        <nz-form-label [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired nzFor="sceanceFormateur">Formateur</nz-form-label>
+        <nz-form-control [nzSm]="24" [nzMd]="24" [nzLg]="14" nzErrorTip="Formateur est requis !">
+          <input nz-input formControlName="sceanceFormateur" id="sceanceFormateur" />
+        </nz-form-control>
+      </nz-form-item> -->
+      <nz-form-item>
+        <nz-form-label [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired nzFor="formateur">Formateur</nz-form-label>
+        <nz-form-control [nzSm]="24" [nzMd]="24" [nzLg]="14" nzErrorTip="Formateur est requis !">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Selectionner un formateur" formControlName="sceanceFormateur"
+            >
+                <nz-option *ngFor="let option of optionList" [nzLabel]="option" [nzValue]="option"></nz-option>
+              </nz-select>
+    <nz-autocomplete [nzDataSource]="optionList" #auto></nz-autocomplete>
+</nz-form-control>
 
+</nz-form-item>
+
+
+ <nz-form-item>
+    <nz-form-label [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired nzFor="dateTimeDebut">Date de debut</nz-form-label>
+    <nz-form-control [nzSm]="24" [nzMd]="24" [nzLg]="14" nzErrorTip="Date de debut est requise !">
+      <nz-date-picker
+      [nzShowTime]="{ nzFormat: 'HH:mm' }"
+      nzFormat="yyyy-MM-dd HH:mm"
+      formControlName="dateTimeDebut"
+      (nzOnOk)="onOk($event)"
+    >
+    </nz-date-picker>
+</nz-form-control>
+</nz-form-item>
+
+<nz-form-item>
+    <nz-form-label [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired nzFor="date">Date de fin</nz-form-label>
+    <nz-form-control [nzSm]="24" [nzMd]="24" [nzLg]="14" nzErrorTip="Date de fin est requise !">
+      <nz-date-picker
+      [nzShowTime]="{ nzFormat: 'HH:mm' }"
+      nzFormat="yyyy-MM-dd HH:mm"
+      formControlName="dateTimeFin"
+      (nzOnOk)="onOk($event)"
+    >
+    </nz-date-picker>
+</nz-form-control>
+</nz-form-item>
+
+<nz-form-item>
+    <nz-form-label [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired nzFor="formateur">Groupe</nz-form-label>
+    <nz-form-control [nzSm]="24" [nzMd]="24" [nzLg]="14" nzErrorTip="Formateur est requis !">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Selectionner un groupe" formControlName="groupe" >
+            <nz-option *ngFor="let option of groupsNames" [nzLabel]="option" [nzValue]="option" 
+            ></nz-option>
+          </nz-select>
+<nz-autocomplete [nzDataSource]="groupsNames" #auto></nz-autocomplete>
+</nz-form-control>
+
+</nz-form-item>
+
+
+      <div fxLayout="row"  fxLayoutAlign="end end">
+        <button nz-button nzType="primary" [disabled]="!validateForm.valid" form="ngForm" value="Save" (click)="saveSeance()" >Ajouter</button>
+    </div>
+</div>
+  </form>
+
+  <div class="list-cadidate-container" fxLayout="row"  fxFlex="auto" nz-row>
+    <div nz-col [nzSm]="0" [nzMd]="0" [nzLg]="6"></div>
+    <cdk-virtual-scroll-viewport nz-col itemSize="50" class="scrollable" fxFlex="auto" [nzSm]="24" [nzMd]="24" [nzLg]="14">
+      <nz-list nzItemLayout="horizontal" >
+        <nz-list-header>
+          <nz-list-item-meta
+            nzDescription= "List des sceances ">
+          </nz-list-item-meta>
+        </nz-list-header>
+        <nz-list-empty *ngIf="listSceance.length === 0"></nz-list-empty>
+     <nz-list-item *ngFor="let sceance of listSceance">
+          <nz-list-item-meta
+            nzAvatar="https://cutt.ly/HQxU03g"
+            nzDescription={{sceance?.sceanceFormateur}}
+          >
+            <nz-list-item-meta-title>
+                {{sceance?.nom}}
+            </nz-list-item-meta-title>
+            <nz-list-item-meta-description>
+                Date de debut: {{sceance?.dateTimeDebut}} <br>
+                Date debut : {{sceance?.dateTimeFin}}
+            </nz-list-item-meta-description>
+          </nz-list-item-meta>
+          <ul nz-list-item-actions>
+            <nz-list-item-action ><a (click)="removeSceanceFromList(sceance)"><i nz-icon nzType="close" nzTheme="outline"></i></a></nz-list-item-action>
+          </ul>
+        </nz-list-item> 
+      </nz-list>
+    </cdk-virtual-scroll-viewport>
+  
+  </div>
+
+  <div fxLayout="row"  fxLayoutAlign="end end">
+    <button id="cancecl-btn" nz-button >Cancel</button>
+    <button nz-button >Reset</button>
+    <button nz-button nzType="primary" form="ngForm" value="Save" >Submit</button>
+</div>
+</div>
