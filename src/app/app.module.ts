@@ -12,16 +12,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { IconsProviderModule } from './icons-provider.module';
 import { NzModule } from './shared/nz.module';
-import { LoginComponent } from './pages/login/login.component';
+import { NzGridModule } from 'ng-zorro-antd/grid';
 
 registerLocaleData(fr);
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
   ],
   imports: [
+    NzGridModule,
     ReactiveFormsModule,
     BrowserModule,
     FormsModule,

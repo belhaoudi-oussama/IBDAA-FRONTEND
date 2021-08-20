@@ -1,3 +1,31 @@
+<div id="form_login">
+  <div style="background: #ECECEC;padding:30px;">
+    <nz-card style="width:300px;" nzTitle="S'authentifier">
+      <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+        <nz-form-item>
+          <nz-form-control nzErrorTip="The input is not valid E-mail!">
+            <nz-input-group nzPrefixIcon="user">
+              <input type="text" nz-input formControlName="email" placeholder="Email" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Please input your Password!">
+            <nz-input-group nzPrefixIcon="lock">
+              <input type="password" nz-input formControlName="password" placeholder="Password" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      
+        <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Log in</button>
+        <a class="login-form-forgot">Forgot password</a>
+      </form>
+    </nz-card>
+  </div>  
+  </div>
+
+ 
+<div *ngIf="isLogged == true">
 <nz-layout class="app-layout">
   <nz-sider class="menu-sidebar"
             nzCollapsible
@@ -68,3 +96,4 @@
     </nz-content>
   </nz-layout>
 </nz-layout>
+</div>
