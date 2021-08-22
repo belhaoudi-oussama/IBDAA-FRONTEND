@@ -104,12 +104,11 @@
   .login-form-button {
     width: 100%;
   }
-  #center{
-    padding-top: 50px;
-    position:relative;
-    margin:0 auto;
-    clear:left;
-    height:auto;
-    z-index: 0;
-    text-align:center;
+
+  #toRight{
+    float: right;
+  }
+
+  .nz-button-group {
+    margin: 0 8px 8px 0;
   }

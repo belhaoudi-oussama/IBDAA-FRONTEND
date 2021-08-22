@@ -1,0 +1,96 @@
+<nz-layout  class="app-layout">
+    <nz-sider class="menu-sidebar"
+              nzCollapsible
+              nzWidth="256px"
+              nzBreakpoint="md"
+              [(nzCollapsed)]="isCollapsed"
+              [nzTrigger]="null">
+      <div class="sidebar-logo">
+        <a href="https://ng.ant.design/" target="_blank">
+          <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
+          <h1>IBDAA Microfinance</h1>
+        </a>
+      </div>
+      <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+        <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
+          <ul>
+            <li nz-menu-item nzMatchRouter>
+              <a routerLink="welcome">Welcome</a>
+            </li>
+            <li nz-menu-item nzMatchRouter>
+              <a>Monitor</a>
+            </li>
+            <li nz-menu-item nzMatchRouter>
+              <a>Workplace</a>
+            </li>
+          </ul>
+        </li>
+        <li nz-submenu nzOpen nzTitle="Formations" nzIcon="form">
+          <ul>
+            <li nz-menu-item nzMatchRouter>
+              <a routerLink="formations" >Ajouter une formation</a>
+            </li>
+          </ul>
+        </li>
+        <li nz-submenu nzOpen nzTitle="Group" nzIcon="team">
+          <ul>
+            <li nz-menu-item nzMatchRouter>
+              <a routerLink="groups">Groups</a>
+            </li>
+          </ul>
+        </li>
+    </ul>
+    </nz-sider>
+    <nz-layout>
+      <nz-header>
+        <div class="app-header">
+          <ul nz-menu nzMode="horizontal">
+            <div nz-row >
+              <div nz-col nzSpan="8">
+            <li nz-menu-item>   
+               <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+              <i class="trigger"
+                 nz-icon
+                 [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'" ></i>
+              </span>
+            </li>
+          </div>
+            <div nz-col nzSpan="8" nzOffset="8">
+              <li nz-menu-item>
+                <nz-button-group>
+                  <button nz-button (click)="log()">{{user.nom +" "+ user.prenom}}</button>
+                  <button nz-button nz-dropdown [nzDropdownMenu]="menu1" nzPlacement="bottomRight">
+                    <i nz-icon nzType="ellipsis"></i>
+                  </button>
+                </nz-button-group>
+                <nz-dropdown-menu #menu1="nzDropdownMenu">
+                  <ul nz-menu>
+                    <li nz-menu-item>Profil</li>
+                    <li nz-menu-item (click)="logOut()" >Se déconnecter</li>
+                  </ul>
+                </nz-dropdown-menu>
+              </li>
+            </div>
+           
+          </div>
+          </ul>
+        </div>
+      </nz-header>
+      <!-- <nz-page-header class="site-page-header" nzTitle="Title" nzSubtitle="This is a subtitle">
+        <nz-breadcrumb nz-page-header-breadcrumb>
+          <nz-breadcrumb-item>First-level Menu</nz-breadcrumb-item>
+          <nz-breadcrumb-item>
+            <a>Second-level Menu</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item>Third-level Menu</nz-breadcrumb-item>
+        </nz-breadcrumb>
+      </nz-page-header> -->
+      <nz-content>
+        <div class="inner-content">
+         <router-outlet></router-outlet>
+        </div>
+      </nz-content>
+    </nz-layout>
+  </nz-layout> 
+
+
