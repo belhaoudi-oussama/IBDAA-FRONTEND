@@ -1,1 +1,117 @@
-<button nz-button nzType="primary" nzShape="circle" (click)="openCreateGroupComponent()"><i nz-icon nzType="download" ></i></button>
+
+<nz-tabset
+    style="height:100%;"
+    [nzTabPosition]="nzTabPosition"
+    [(nzSelectedIndex)]="selectedIndex"
+>
+    <nz-tab
+      [nzTitle]="'Create Formation'"
+      [nzDisabled]="false"
+    >
+    <br>
+    <div class="form-container" fxFlexFill fxLayoutAlign="start "  fxLayout="column">
+        <form nz-form [formGroup]="formationForm" id="ngForm" #detailForm="ngForm" (ngSubmit)="submitForm(formationForm.value) " >
+                <div class="controles-container">
+                    <nz-form-item>
+                    <nz-form-label   [nzSm]="24" [nzMd]="24" [nzLg]="4"  nzRequired>Name</nz-form-label>
+                    <nz-form-control  [nzSm]="24" [nzMd]="24" [nzLg]="16" nzHasFeedback nzValidatingTip="Validating..."  [nzErrorTip]="groupNameErrorTpl">
+                        <input nz-input formControlName="name" placeholder="Enter the Formation Name" type="text" nzSize="large" nzSize="large"/>
+                        <ng-template #groupNameErrorTpl let-control>
+                        <ng-container *ngIf="control.hasError('required')">Formation Name is Required</ng-container>
+                        <ng-container *ngIf="control.hasError('duplicated')">The Name is redundant!</ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                    </nz-form-item>
+            
+                    <nz-form-item>
+                        <nz-form-label  [nzSm]="24" [nzMd]="24" [nzLg]="4" >Type</nz-form-label>
+                        <nz-form-control  [nzSm]="24" [nzMd]="24" [nzLg]="16" nzSearch>
+                            <nz-radio-group formControlName="type">
+                                <label nz-radio-button nzValue="pre"><span>Pre</span></label>
+                                <label nz-radio-button nzValue="post"><span>Post</span></label>
+                            </nz-radio-group>
+                    
+                        </nz-form-control>
+                    </nz-form-item>
+            
+                    <nz-form-item>
+                        <nz-form-label  [nzSm]="24" [nzMd]="24" [nzLg]="4" >State</nz-form-label>
+                        <nz-form-control  [nzSm]="24" [nzMd]="24" [nzLg]="16" nzSearch>
+                            <nz-select  nzSize="large" formControlName="status">
+                                <nz-option [nzLabel]="'Open'" [nzValue]="'open'"></nz-option>
+                                <nz-option [nzLabel]="'Closed'" [nzValue]="'Closed'"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+            
+                    <nz-form-item>
+                        <nz-form-label  [nzSm]="24" [nzMd]="24" [nzLg]="4" nzTooltipTitle="This field is calculated by Hours" nzRequired>Duration</nz-form-label>
+                        <nz-form-control  [nzSm]="24" [nzMd]="24" [nzLg]="16" nzSearch>
+                            <nz-input-number  [nzSize]="'large'" [nzMin]="currentDeration"  [nzStep]="0.5" formControlName="deration"></nz-input-number>
+                        </nz-form-control>
+                    </nz-form-item>
+            
+                    <nz-form-item>
+                    <nz-form-label  [nzSm]="24" [nzMd]="24" [nzLg]="4" nzRequired>Description</nz-form-label>
+                    <nz-form-control   [nzSm]="24" [nzMd]="24" [nzLg]="16" nzErrorTip="Please write something here!">
+                        <textarea formControlName="description" nz-input rows="2" placeholder="description of group" nzSize="large"></textarea>
+                    </nz-form-control>
+                    </nz-form-item>
+                <br><br>
+                    <nz-form-item nz-row class="register-area">
+                        <div nz-col nzSm="24" nzMd="24" nzLg="4" ></div>
+                        <nz-form-control >
+                        <nz-space nzSize="middle">
+                          <a nz-button nzType="dashed" nzSize="large" *nzSpaceItem (click)="openCreateGroupComponent()" [disabled]="!formationForm.valid"><i nz-icon nzType="appstore-add" nzTheme="outline"></i> Add Sessions</a>
+                          <button nz-button nzType="primary" nzSize="large" *nzSpaceItem>Submit</button>
+                        </nz-space>
+                        </nz-form-control>
+                      </nz-form-item>
+                </div>
+            </form>
+        </div>
+
+    </nz-tab>
+    <nz-tab
+    [nzTitle]="'List Session'"
+    [nzDisabled]="false"
+    >
+        <br>
+        <nz-table #nzTable [nzData]="listOfDisplayData" nzTableLayout="fixed">
+            <thead>
+            <tr>
+                <th nzCustomFilter>
+                Name
+                <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValue.length > 0" [nzDropdownMenu]="menu">
+                    <i nz-icon nzType="search"></i>
+                </nz-filter-trigger>
+                </th>
+                <th>Former</th>
+                <th>Group</th>
+                <th>Start date</th>
+                <th>End date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let data of nzTable.data">
+                <td>{{ data.nom }}</td>
+                <td>{{ data.sceanceFormateur }}</td>
+                <td>{{ data.groupe }}</td>
+                <td>{{ data.dateTimeDebut }}</td>
+                <td>{{ data.dateTimeFin }}</td>
+            </tr>
+            </tbody>
+        </nz-table>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+            <div class="search-box">
+                <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" />
+                <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
+                <button nz-button nzSize="small" (click)="reset()">Reset</button>
+            </div>
+            </div>
+        </nz-dropdown-menu>
+    </nz-tab>
+
+</nz-tabset>
+

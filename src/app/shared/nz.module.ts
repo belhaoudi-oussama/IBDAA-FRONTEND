@@ -71,6 +71,7 @@ import { NzPipesModule } from 'ng-zorro-antd/pipes';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 
 
@@ -147,7 +148,8 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
     NzResizableModule,
     NzPipesModule,
     ScrollingModule,
-    FlexLayoutModule 
+    FlexLayoutModule ,
+    NzSpaceModule
   ]
 })
 export class NzModule { }

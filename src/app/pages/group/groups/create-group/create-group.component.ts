@@ -3,8 +3,11 @@ import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { NzDrawerRef } from 'ng-zorro-antd/drawer';
 import { Observable, Observer, Subscription } from 'rxjs';
+import { GroupService } from 'src/app/services/group.service';
 import { ICandidate } from '../candidate';
 import { candidate } from '../data';
+import { ReqCandidate } from './reqCandidate';
+import { ReqGroup } from './reqGroup';
 
 @Component({
   selector: 'app-create-group',
@@ -19,7 +22,7 @@ export class CreateGroupComponent implements OnInit {
   listOfSelectedCandidate : ICandidate[] = [];
   mediaSub: Subscription; 
   activeMedia : string='';
-  constructor(private drawerRef: NzDrawerRef<string> , private fb: FormBuilder , public mediaObserver : MediaObserver) { 
+  constructor(private drawerRef: NzDrawerRef<string> , private fb: FormBuilder , public mediaObserver : MediaObserver , private groupService : GroupService ) { 
     this.mediaSub = this.mediaObserver.asObservable().subscribe((res:MediaChange[]) => {
       this.activeMedia=res[0].mqAlias;
       if(this.activeMedia == 'xs'){
@@ -36,15 +39,26 @@ export class CreateGroupComponent implements OnInit {
   }
   groupNameValidator = (control: FormControl) =>
   new Observable((observer: Observer<ValidationErrors | null>) => {
-    setTimeout(() => {
-      if (control.value === 'G1' || control.value === 'G2' || control.value === 'G3') {
+
+    this.groupService.groupExist(control.value).subscribe(
+      next=>{
+        if(next){
+          observer.next({ error: true, duplicated: true })
+        }else{
+          observer.next(null);
+        }
+        observer.complete();
+    
+      }
+    )
+    /*if (control.value === 'G1' || control.value === 'G2' || control.value === 'G3') {
         // you have to return `{error: true}` to mark it as an error event
         observer.next({ error: true, duplicated: true });
       } else {
         observer.next(null);
       }
-      observer.complete();
-    }, 1000);
+      observer.complete();*/
+    
   });
 
   submitForm(value: { groupName: string; description: string; search: string;}): void {
@@ -54,7 +68,27 @@ export class CreateGroupComponent implements OnInit {
         this.groupForm.controls[key].updateValueAndValidity();
       }
     }
-    console.log(value);
+     let candidateList : ReqCandidate[] = this.listOfSelectedCandidate.map((candidate:ICandidate)=>{
+      let newCandidate! : ReqCandidate ;
+      newCandidate.cin = candidate.CIN;
+      newCandidate.nom = candidate.firtName;
+      newCandidate.prenom = candidate.lastName;
+      newCandidate.email = candidate.email;
+      newCandidate.type = candidate.type;
+      newCandidate.adresse = candidate.adresse ;
+      newCandidate.telephone = candidate.phone;
+      newCandidate.formationsCandidat = candidate.formationsCandidat;
+      newCandidate.groupe = candidate.groupe;
+      return newCandidate
+    });
+
+    let group : ReqGroup = {
+      nom : value.groupName,
+      description : value.description,
+      candidats : candidateList
+    }
+    this.groupService.createGroup(group);
+    
   }
   resetForm(e: MouseEvent): void {
     e.preventDefault();
@@ -71,8 +105,14 @@ export class CreateGroupComponent implements OnInit {
 
   onChange(e: Event): void {
     const value = (e.target as HTMLInputElement).value;
-    this.filteredCadidate=[];
-    this.filteredCadidate=this.data.filter(x => x.email.toLowerCase().includes(value.toLowerCase()))
+    this.groupService.searchCandidate(value).subscribe(
+      next => {
+        this.data = next;
+        this.filteredCadidate = next;
+      }
+    )
+    /*this.filteredCadidate=[];
+    this.filteredCadidate=this.data.filter(x => x.email.toLowerCase().includes(value.toLowerCase()))*/
     
   }
   selectCandidate(candidate: ICandidate):boolean{

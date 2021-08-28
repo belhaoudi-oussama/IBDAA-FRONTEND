@@ -14,15 +14,5 @@ export class WelcomeComponent implements OnInit {
   ngOnInit() {
   }
 
-  openCreateGroupComponent(): void {
-    this.drawerService.create<CreateSessionsComponent, { value: number | null }, string>({
-    nzTitle: 'Create New Sessions',
-    nzContent: CreateSessionsComponent,
-    nzMaskClosable:false,
-    nzWidth : "50%",
-    nzContentParams: {
-      value : null
-    }
-  });
-}
+
 }
