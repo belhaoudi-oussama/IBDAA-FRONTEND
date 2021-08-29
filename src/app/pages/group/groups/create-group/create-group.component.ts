@@ -6,6 +6,7 @@ import { Observable, Observer, Subscription } from 'rxjs';
 import { GroupService } from 'src/app/services/group.service';
 import { ICandidate } from '../candidate';
 import { candidate } from '../data';
+import { IGroup } from '../group';
 import { ReqCandidate } from './reqCandidate';
 import { ReqGroup } from './reqGroup';
 
@@ -62,14 +63,16 @@ export class CreateGroupComponent implements OnInit {
   });
 
   submitForm(value: { groupName: string; description: string; search: string;}): void {
-    for (const key in this.groupForm.controls) {
+    
+    /*for (const key in this.groupForm.controls) {
       if (this.groupForm.controls.hasOwnProperty(key)) {
         this.groupForm.controls[key].markAsDirty();
         this.groupForm.controls[key].updateValueAndValidity();
       }
-    }
+    }*/
      let candidateList : ReqCandidate[] = this.listOfSelectedCandidate.map((candidate:ICandidate)=>{
-      let newCandidate! : ReqCandidate ;
+      let newCandidate : ReqCandidate = {} ;
+      newCandidate.id = candidate.id;
       newCandidate.cin = candidate.CIN;
       newCandidate.nom = candidate.firtName;
       newCandidate.prenom = candidate.lastName;
@@ -109,6 +112,13 @@ export class CreateGroupComponent implements OnInit {
       next => {
         this.data = next;
         this.filteredCadidate = next;
+        this.listOfSelectedCandidate.forEach((element:ICandidate)=>{
+          const index = this.filteredCadidate.indexOf(element);
+          const index2 = this.data.indexOf(element);
+          this.filteredCadidate=this.filteredCadidate.filter(x=>JSON.stringify(x) != JSON.stringify(element));
+          this.data=this.data.filter(x=>JSON.stringify(x) != JSON.stringify(element));
+        })
+        
       }
     )
     /*this.filteredCadidate=[];

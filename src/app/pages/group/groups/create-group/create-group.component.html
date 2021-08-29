@@ -26,6 +26,7 @@
       </nz-form-item>
 
     </div>
+    <button nz-button nzType="primary" [disabled]="!groupForm.valid" form="ngForm" value="Save" type="submit">Submit</button>
   </form>
 
 <div class="list-cadidate-container" fxLayout="row"  fxFlex="auto" nz-row>
@@ -59,7 +60,7 @@
 <div fxLayout="row"  fxLayoutAlign="end end">
     <button id="cancecl-btn" nz-button (click)="close()">Cancel</button>
     <button nz-button (click)="resetForm($event)">Reset</button>
-    <button nz-button nzType="primary" [disabled]="!groupForm.valid" form="ngForm" value="Save" (click)="detailForm.ngSubmit.emit('Save')">Submit</button>
+    <button nz-button nzType="primary" [disabled]="!groupForm.valid" form="ngForm" value="Save" (click)="submitForm(groupForm.value)">Submit</button>
 </div>
 </div>
 

@@ -1,11 +1,12 @@
 import { ReqGroup } from "./reqGroup"
 
 export interface ReqCandidate{
-    cin: string,
-    nom: string,
-    prenom: string,
-    email: string,
-    type: string,
+    id?: number | null,
+    cin?: string | null,
+    nom?: string | null,
+    prenom?: string | null,
+    email?: string | null,
+    type?: string | null,
     telephone? : string | null,
     adresse? : string | null,
     formationsCandidat?: [],

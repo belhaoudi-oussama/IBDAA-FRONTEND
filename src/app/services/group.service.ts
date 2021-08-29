@@ -30,14 +30,21 @@ export class GroupService {
     return this.http.get<boolean>(`${this.groupApi}/checkgroup/${group}`)
   } 
   createGroup(group : ReqGroup){
-      this.http.post<any>(this.groupApi, group)
+      console.log("----------------------------------------------------------------------------------------------gergme,rgpmqerogk,peqroge;rpgeorg;e");
+      console.log(JSON.stringify(group));
+      this.http.post<any>(this.groupApi, group).subscribe(
+        next=> console.log(next)
+      );
+
   }
   searchCandidate(name : string): Observable<ICandidate[]>{
     return this.http.get<ReqCandidate[]>(`${this.candidateApi}/name/${name}`).pipe(
      
       map( (candidates : ReqCandidate[])=>{
         return candidates.map((candidate : ReqCandidate) => {
-          let newCandidate! : ICandidate ;
+          let newCandidate : ICandidate = {};
+          console.log(candidate.cin);
+          newCandidate.id = candidate.id;
           newCandidate.CIN = candidate.cin;
           newCandidate.firtName = candidate.nom;
           newCandidate.lastName = candidate.prenom;
