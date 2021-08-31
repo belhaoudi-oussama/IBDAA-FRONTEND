@@ -30,8 +30,6 @@ export class GroupService {
     return this.http.get<boolean>(`${this.groupApi}/checkgroup/${group}`)
   } 
   createGroup(group : ReqGroup){
-      console.log("----------------------------------------------------------------------------------------------gergme,rgpmqerogk,peqroge;rpgeorg;e");
-      console.log(JSON.stringify(group));
       this.http.post<any>(this.groupApi, group).subscribe(
         next=> console.log(next)
       );
