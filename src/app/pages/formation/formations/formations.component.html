@@ -1,1 +1,48 @@
+<div class="rowContainer" nz-row >
+    <div class="addSpan" nz-col nzSpan="24"  fxLayout="row" fxLayoutAlign="end center">
+      <form  action="#">
+        <nz-input-group [nzSuffix]="suffixIconSearch" class="filter-field">
+          <input type="text" nz-input placeholder="input search text" />
+        </nz-input-group>
+        <ng-template #suffixIconSearch>
+          <button nz-button nzType="link" type="submit" ><i nz-icon nzType="search"></i></button>
+        </ng-template>
+      </form>
+</div>
 
+<nz-table class="formationTable" #nzTable [nzData]="listOfDisplayData" nzTableLayout="fixed">
+    <thead>
+      <tr>
+        <th nzCustomFilter>
+          Name
+          <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValue.length > 0" [nzDropdownMenu]="menu">
+            <i nz-icon nzType="search"></i>
+          </nz-filter-trigger>
+        </th>
+        <th>Descreption</th>
+        <th>Duration</th>
+        <th>State</th>
+        <th>Type</th>
+        <th>Sessions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of nzTable.data">
+        <td>{{ data.name }}</td>
+        <td>{{ data.descreption }}</td>
+        <td>{{  data.duration }}</td>
+        <td>{{ data.state }}</td>
+        <td>{{  data.type }}</td>
+        <td><a [routerLink]="['sessions', data.id]">Sessions</a></td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <div class="ant-table-filter-dropdown">
+      <div class="search-box">
+        <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" />
+        <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
+        <button nz-button nzSize="small" (click)="reset()">Reset</button>
+      </div>
+    </div>
+  </nz-dropdown-menu>

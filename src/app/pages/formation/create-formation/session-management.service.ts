@@ -34,6 +34,5 @@ export class SessionManagementService {
       duration = duration + (end.getTime() - start.getTime());
     });
     this.deration = duration / (1000 * 3600);
-    console.log("service---> ",this.deration )
   }
 }
