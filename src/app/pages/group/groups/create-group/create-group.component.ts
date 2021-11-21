@@ -63,7 +63,6 @@ export class CreateGroupComponent implements OnInit {
   });
 
   submitForm(value: { groupName: string; description: string; search: string;}): void {
-    
     /*for (const key in this.groupForm.controls) {
       if (this.groupForm.controls.hasOwnProperty(key)) {
         this.groupForm.controls[key].markAsDirty();
@@ -91,7 +90,7 @@ export class CreateGroupComponent implements OnInit {
       candidats : candidateList
     }
     this.groupService.createGroup(group);
-    
+    this.drawerRef.close();
   }
   resetForm(e: MouseEvent): void {
     e.preventDefault();
@@ -108,19 +107,19 @@ export class CreateGroupComponent implements OnInit {
 
   onChange(e: Event): void {
     const value = (e.target as HTMLInputElement).value;
-    this.groupService.searchCandidate(value).subscribe(
-      next => {
-        this.data = next;
-        this.filteredCadidate = next;
-        this.listOfSelectedCandidate.forEach((element:ICandidate)=>{
-          const index = this.filteredCadidate.indexOf(element);
-          const index2 = this.data.indexOf(element);
-          this.filteredCadidate=this.filteredCadidate.filter(x=>JSON.stringify(x) != JSON.stringify(element));
-          this.data=this.data.filter(x=>JSON.stringify(x) != JSON.stringify(element));
-        })
-        
-      }
-    )
+    if(value){
+      this.groupService.searchCandidate(value).subscribe(
+        next => {
+          this.data = next;
+          this.filteredCadidate = next;
+          this.listOfSelectedCandidate.forEach((element:ICandidate)=>{
+            const index = this.filteredCadidate.indexOf(element);
+            const index2 = this.data.indexOf(element);
+            this.filteredCadidate=this.filteredCadidate.filter(x=>JSON.stringify(x) != JSON.stringify(element));
+            this.data=this.data.filter(x=>JSON.stringify(x) != JSON.stringify(element));
+          })
+        });
+    }
     /*this.filteredCadidate=[];
     this.filteredCadidate=this.data.filter(x => x.email.toLowerCase().includes(value.toLowerCase()))*/
     

@@ -16,8 +16,8 @@ export class GroupService {
   candidateApi :string =  "http://localhost:8080/api/v1/candidat";
   constructor(private http : HttpClient) { }
   
-  getGroups() : Observable<IGroup[]>{
-    return this.http.get<IGroup[]>(this.groupApi);
+  getGroups() : Observable<any[]>{
+    return this.http.get<any[]>(this.groupApi);
   }
   getGroupById(id : number) : Observable<IGroup[]>{
     return this.http.get<IGroup[]>(`${this.groupApi}/${id}`);
@@ -30,9 +30,7 @@ export class GroupService {
     return this.http.get<boolean>(`${this.groupApi}/checkgroup/${group}`)
   } 
   createGroup(group : ReqGroup){
-      this.http.post<any>(this.groupApi, group).subscribe(
-        next=> console.log(next)
-      );
+      this.http.post<any>(this.groupApi, group).subscribe();
 
   }
   searchCandidate(name : string): Observable<ICandidate[]>{
@@ -41,7 +39,6 @@ export class GroupService {
       map( (candidates : ReqCandidate[])=>{
         return candidates.map((candidate : ReqCandidate) => {
           let newCandidate : ICandidate = {};
-          console.log(candidate.cin);
           newCandidate.id = candidate.id;
           newCandidate.CIN = candidate.cin;
           newCandidate.firtName = candidate.nom;
@@ -59,6 +56,22 @@ export class GroupService {
     )
   }
   
-  
+  fillcandidate(){
+    for (let index = 0; index < 10; index++) {
+      let c : ReqCandidate = {};
+      c.cin = `EE75278${index}`;
+      c.nom = `candidate-${index}`;
+      c.prenom = `lastname-${index}`;
+      c.email = `${c.nom}@gmail.com`;
+      c.type = `post`;
+      c.adresse =`adresse-${index}`;
+      c.telephone = `065236553${index}`;
+      this.http.post<any>(this.candidateApi, c).subscribe(
+        next=> console.log(next)
+        );
+      }
+      
+    }
+    
   
 }

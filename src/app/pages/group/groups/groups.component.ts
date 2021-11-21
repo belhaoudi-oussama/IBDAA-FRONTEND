@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzButtonSize } from 'ng-zorro-antd/button';
 import { NzDrawerService } from 'ng-zorro-antd/drawer';
+import { GroupService } from 'src/app/services/group.service';
 import { ColumnItem } from './columnItem';
 import { CreateGroupComponent } from './create-group/create-group.component';
 import { groups } from './data';
@@ -42,10 +43,14 @@ export class GroupsComponent implements OnInit {
     
   ]
 
-  constructor( private drawerService: NzDrawerService) {
+  constructor( private drawerService: NzDrawerService, private groupService :GroupService) {
     this.listOfDisplayData=[...this.listOfData];
   }
-  ngOnInit(): void { }
+  ngOnInit(): void { 
+    this.groupService.getGroups().subscribe(
+      next=>{console.log(next)}
+    )
+  }
   search(): void {
     this.filterFields[this.selectedFilterField] = this.searchValue;
     this.searchValue = '';
