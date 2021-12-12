@@ -80,7 +80,11 @@
               "browserTarget": "IBDAA-FRONTEND:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "browserTarget": "IBDAA-FRONTEND:build",
+            "proxyConfig" : "src/proxy.conf.json"
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",

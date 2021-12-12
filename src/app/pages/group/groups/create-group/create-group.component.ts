@@ -80,7 +80,11 @@ export class CreateGroupComponent implements OnInit {
       newCandidate.adresse = candidate.adresse ;
       newCandidate.telephone = candidate.phone;
       newCandidate.formationsCandidat = candidate.formationsCandidat;
-      newCandidate.groupe = candidate.groupe;
+      /*if(!candidate.groupe){
+        newCandidate.groupe = null;
+      }else{
+        newCandidate.groupe = candidate.groupe;
+      }*/
       return newCandidate
     });
 
@@ -89,7 +93,12 @@ export class CreateGroupComponent implements OnInit {
       description : value.description,
       candidats : candidateList
     }
-    this.groupService.createGroup(group);
+    if(this.value){
+      group.id = this.value;
+      this.groupService.editGroup(group);
+    }else{
+      this.groupService.createGroup(group);
+    }
     this.drawerRef.close();
   }
   resetForm(e: MouseEvent): void {
@@ -158,8 +167,27 @@ export class CreateGroupComponent implements OnInit {
       description: ['', [Validators.required]]
     });
     if(this.value !== null ){
-      this.groupForm.get('groupName')?.setValue("G1");
-      this.groupForm.get('description')?.setValue("good Group")
+      this.groupService.getGroupById(this.value).subscribe(
+        next=>{
+          this.groupForm.get('groupName')?.setValue(next.nom);
+          this.groupForm.get('description')?.setValue(next.description);
+          this.listOfSelectedCandidate = next.candidats.map((candidate : ReqCandidate) => {
+            let newCandidate : ICandidate = {};
+            newCandidate.id = candidate.id;
+            newCandidate.CIN = candidate.cin;
+            newCandidate.firtName = candidate.nom;
+            newCandidate.lastName = candidate.prenom;
+            newCandidate.email = candidate.email;
+            newCandidate.type = candidate.type;
+            newCandidate.adresse = candidate.adresse;
+            newCandidate.phone = candidate.telephone;
+            newCandidate.formationsCandidat = candidate.formationsCandidat;
+            newCandidate.groupe = candidate.groupe;
+            return newCandidate
+          });
+        }
+      )
+    
 
     }
   }

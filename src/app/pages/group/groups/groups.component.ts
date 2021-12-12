@@ -4,7 +4,6 @@ import { NzDrawerService } from 'ng-zorro-antd/drawer';
 import { GroupService } from 'src/app/services/group.service';
 import { ColumnItem } from './columnItem';
 import { CreateGroupComponent } from './create-group/create-group.component';
-import { groups } from './data';
 import { IGroup } from './group';
 
 @Component({
@@ -19,8 +18,8 @@ export class GroupsComponent implements OnInit {
   searchValue = '';
   selectedFilterField : string = "name";
   filterFields : { [key: string]: string; } = {'name': '', 'description': '', 'numberOfCandidate': ''};
-  listOfData : IGroup[] = groups;
-  listOfDisplayData: IGroup[] ;
+  listOfData : IGroup[] = [];
+  listOfDisplayData: IGroup[] = [];
   listOfColumns: ColumnItem[] = [
     {
       name: 'name',
@@ -44,12 +43,16 @@ export class GroupsComponent implements OnInit {
   ]
 
   constructor( private drawerService: NzDrawerService, private groupService :GroupService) {
-    this.listOfDisplayData=[...this.listOfData];
+    this.groupService.getGroups().subscribe(
+      next=>{
+        this.listOfData = next;
+        this.listOfDisplayData=[...this.listOfData];
+      }
+    )
+    
   }
   ngOnInit(): void { 
-    this.groupService.getGroups().subscribe(
-      next=>{console.log(next)}
-    )
+
   }
   search(): void {
     this.filterFields[this.selectedFilterField] = this.searchValue;

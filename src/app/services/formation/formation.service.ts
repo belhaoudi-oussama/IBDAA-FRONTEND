@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class FormationService {
-
+/*
   formationApi :string =  "http://localhost:8080/api/v1/group";
 
   constructor(private http : HttpClient) { }
@@ -30,5 +30,5 @@ export class FormationService {
       );
 
   }
-
+*/
 }

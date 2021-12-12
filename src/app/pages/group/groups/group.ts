@@ -5,4 +5,5 @@ export interface IGroup{
     name: string,
     description: string,
     candidates: ICandidate[],
+    sessions? : any[]
 }

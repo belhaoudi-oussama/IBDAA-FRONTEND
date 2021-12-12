@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -8,55 +8,87 @@ import { ReqGroup } from '../pages/group/groups/create-group/reqGroup';
 import { candidate } from '../pages/group/groups/data';
 import { IGroup } from '../pages/group/groups/group';
 
+
+function mapCandidate(candidates : ReqCandidate[]) : ICandidate[]{
+  return candidates.map((candidate : ReqCandidate) => {
+    let newCandidate : ICandidate = {};
+    newCandidate.id = candidate.id;
+    newCandidate.CIN = candidate.cin;
+    newCandidate.firtName = candidate.nom;
+    newCandidate.lastName = candidate.prenom;
+    newCandidate.email = candidate.email;
+    newCandidate.type = candidate.type;
+    newCandidate.adresse = candidate.adresse;
+    newCandidate.phone = candidate.telephone;
+    newCandidate.formationsCandidat = candidate.formationsCandidat;
+    newCandidate.groupe = candidate.groupe;
+    return newCandidate
+  });
+}
+
+function mapGroup(groups :ReqGroup[]): IGroup[]{
+  return groups.map((group : ReqGroup)=>{
+    let newGroup : IGroup = {
+      id : group.id ? group.id : -1,
+      name : group.nom,
+      description : group.description,
+      candidates : mapCandidate(group.candidats),
+      sessions : group.sceances,
+    };
+    return newGroup;
+  })
+}
+
 @Injectable({
   providedIn: 'root'
 })
+
+
+
 export class GroupService {
-  groupApi :string =  "http://localhost:8080/api/v1/group";
-  candidateApi :string =  "http://localhost:8080/api/v1/candidat";
+  groupApi :string =  "group";
+  candidateApi :string =  "candidat";
+  proxy : string = "/api/";
+  private options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
   constructor(private http : HttpClient) { }
   
-  getGroups() : Observable<any[]>{
-    return this.http.get<any[]>(this.groupApi);
+  getGroups() : Observable<IGroup[]>{
+    return this.http.get<any[]>(this.proxy+this.groupApi).pipe(
+      map( (groups : ReqGroup[])=>{
+        return mapGroup(groups);
+      })
+    )
   }
-  getGroupById(id : number) : Observable<IGroup[]>{
-    return this.http.get<IGroup[]>(`${this.groupApi}/${id}`);
+  getGroupById(id : number) : Observable<ReqGroup>{
+    return this.http.get<ReqGroup>(`${this.proxy+ this.groupApi}/id/${id}`);
   }
   
   getGroupsNames() : Observable<string[]>{
-    return this.http.get<string[]>(`${this.groupApi}/getGroupeNames`)
+    return this.http.get<string[]>(`${this.proxy + this.groupApi}/getGroupeNames`)
   }
   groupExist(group : string): Observable<boolean>{
-    return this.http.get<boolean>(`${this.groupApi}/checkgroup/${group}`)
+    return this.http.get<boolean>(`${this.proxy + this.groupApi}/checkgroup/${group}`)
   } 
   createGroup(group : ReqGroup){
-      this.http.post<any>(this.groupApi, group).subscribe();
-
+    this.http.post<any>(this.proxy + this.groupApi, group).subscribe();
+  }
+  editGroup(group : ReqGroup){
+    group.sceances=null;
+    console.log(group)
+    this.http.put<any>(`${this.proxy + this.groupApi}`,  group).subscribe();
+  }
+  deleteGroup(group : ReqGroup){
+    this.http.delete<any>(`${this.proxy + this.groupApi}/${group.id}`).subscribe();
   }
   searchCandidate(name : string): Observable<ICandidate[]>{
-    return this.http.get<ReqCandidate[]>(`${this.candidateApi}/name/${name}`).pipe(
-     
+    return this.http.get<ReqCandidate[]>(`${this.proxy + this.candidateApi}/name/${name}`).pipe(
       map( (candidates : ReqCandidate[])=>{
-        return candidates.map((candidate : ReqCandidate) => {
-          let newCandidate : ICandidate = {};
-          newCandidate.id = candidate.id;
-          newCandidate.CIN = candidate.cin;
-          newCandidate.firtName = candidate.nom;
-          newCandidate.lastName = candidate.prenom;
-          newCandidate.email = candidate.email;
-          newCandidate.type = candidate.type;
-          newCandidate.adresse = candidate.adresse;
-          newCandidate.phone = candidate.telephone;
-          newCandidate.formationsCandidat = candidate.formationsCandidat;
-          newCandidate.groupe = candidate.groupe;
-          return newCandidate
-         });
-
+        return mapCandidate(candidates);
       })
     )
   }
   
-  fillcandidate(){
+  /*fillcandidate(){
     for (let index = 0; index < 10; index++) {
       let c : ReqCandidate = {};
       c.cin = `EE75278${index}`;
@@ -71,7 +103,7 @@ export class GroupService {
         );
       }
       
-    }
+    }*/
     
   
 }
