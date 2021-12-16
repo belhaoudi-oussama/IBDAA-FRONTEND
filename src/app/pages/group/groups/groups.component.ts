@@ -5,6 +5,10 @@ import { GroupService } from 'src/app/services/group.service';
 import { ColumnItem } from './columnItem';
 import { CreateGroupComponent } from './create-group/create-group.component';
 import { IGroup } from './group';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { ReqCandidate } from './create-group/reqCandidate';
+import { ICandidate } from './candidate';
+import { ReqGroup } from './create-group/reqGroup';
 
 @Component({
   selector: 'app-groups',
@@ -42,7 +46,7 @@ export class GroupsComponent implements OnInit {
     
   ]
 
-  constructor( private drawerService: NzDrawerService, private groupService :GroupService) {
+  constructor( private drawerService: NzDrawerService, private groupService :GroupService, private nzMessageService: NzMessageService) {
     this.groupService.getGroups().subscribe(
       next=>{
         this.listOfData = next;
@@ -104,7 +108,7 @@ export class GroupsComponent implements OnInit {
   }
   openEditGroupComponent(id:number):void{
       this.drawerService.create<CreateGroupComponent, { value: number | null }, string>({
-      nzTitle: 'Create New Group',
+      nzTitle: 'Edit Group',
       nzContent: CreateGroupComponent,
       nzMaskClosable:false,
       nzWidth : "50%",
@@ -113,6 +117,37 @@ export class GroupsComponent implements OnInit {
       }
     });
   }
+  cancel(): void {
+    this.nzMessageService.info('delete canceled');
+  }
 
+  confirm(group : IGroup): void {
+
+
+    let gp : ReqGroup = {
+      id : group.id,
+      nom : group.name,
+      description : group.description,
+      candidats : group.candidates.map((candidate:ICandidate)=>{
+        let newCandidate : ReqCandidate = {} ;
+        newCandidate.id = candidate.id;
+        newCandidate.cin = candidate.CIN;
+        newCandidate.nom = candidate.firtName;
+        newCandidate.prenom = candidate.lastName;
+        newCandidate.email = candidate.email;
+        newCandidate.type = candidate.type;
+        newCandidate.adresse = candidate.adresse ;
+        newCandidate.telephone = candidate.phone;
+        /*if(!candidate.groupe){
+          newCandidate.groupe = null;
+        }else{
+          newCandidate.groupe = candidate.groupe;
+        }*/
+        return newCandidate
+      }),
+    }
+    this.nzMessageService.info('Group deleted');
+    this.groupService.deleteGroup(gp);
+  }
 }
         

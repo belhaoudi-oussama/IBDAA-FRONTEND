@@ -9,7 +9,6 @@ export interface ReqCandidate{
     type?: string | null,
     telephone? : string | null,
     adresse? : string | null,
-    formationsCandidat?: [],
     groupe?: ReqGroup | null
 
 }

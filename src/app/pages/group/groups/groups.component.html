@@ -53,7 +53,13 @@
                   <td>
                     <button nz-button [nzSize]="size" nzType="link" (click)="openEditGroupComponent(data.id)"><i nz-icon nzType="edit" nzTheme="outline"></i></button>
                     <nz-divider nzType="vertical"></nz-divider>
-                    <button nz-button [nzSize]="size" nzType="link" nzDanger><i nz-icon nzType="delete" nzTheme="outline" ></i></button>
+                    <button nz-button [nzSize]="size" nzType="link" nzDanger 
+                    nz-popconfirm
+                    nzPopconfirmTitle="Are you sure delete this group?"
+                    (nzOnConfirm)="confirm(data)"
+                    (nzOnCancel)="cancel()"
+                    nzPopconfirmPlacement="topRight"
+                    nz-button><i nz-icon nzType="delete" nzTheme="outline" ></i></button>
                     
                   </td>
                 </tr>

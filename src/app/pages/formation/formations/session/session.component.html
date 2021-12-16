@@ -17,8 +17,8 @@
     <tbody>
     <tr *ngFor="let data of nzTable.data">
         <td>{{ data.nom }}</td>
-        <td>{{ data.sceanceFormateur }}</td>
-        <td>{{ data.groupe }}</td>
+        <td>{{ data.formateur }}</td>
+        <td>{{ data.groupReq?.nom }}</td>
         <td>{{ data.dateTimeDebut }}</td>
         <td>{{ data.dateTimeFin }}</td>
     </tr>

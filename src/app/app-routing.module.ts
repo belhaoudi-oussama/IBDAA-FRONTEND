@@ -15,9 +15,9 @@ const routes: Routes = [
     component: DashboardComponent,
     /*canActivate: [AuthService],*/
     children: [
-      { path: 'groups', loadChildren: () => import('./pages/group/group.module').then(m => m.GroupModule)/*,canActivate: [AuthService], */},
-      { path: 'welcome', loadChildren: () => import('./pages/welcome/welcome.module').then(m => m.WelcomeModule),/*canActivate: [AuthService],*/ },
-      { path: 'formations', loadChildren: () => import('./pages/formation/formation.module').then(m => m.FormationModule),/*canActivate: [AuthService],*/ }
+      { path: 'groups', loadChildren: () => import('./pages/group/group.module').then(m => m.GroupModule),canActivate: [AuthService]},
+      { path: 'welcome', loadChildren: () => import('./pages/welcome/welcome.module').then(m => m.WelcomeModule),canActivate: [AuthService] },
+      { path: 'formations', loadChildren: () => import('./pages/formation/formation.module').then(m => m.FormationModule),canActivate: [AuthService] }
 
     ]
   }

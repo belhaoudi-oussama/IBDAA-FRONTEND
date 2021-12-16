@@ -5,14 +5,13 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class FormateurService {
-  private BASE_URL!:string;
+  proxy : string = "/api/";
+  formationApi : string = "formateur";
 
   constructor(private http: HttpClient) {
-    this.BASE_URL='http://localhost:8080';
-
    }
    
    public getFormateurNames(){
-    return this.http.get<string[]>(`${this.BASE_URL}/api/v1/formateur/names`);
+    return this.http.get<any[]>(this.proxy+this.formationApi);
   }
 }

@@ -37,7 +37,7 @@
                     <nz-form-item>
                         <nz-form-label  [nzSm]="24" [nzMd]="24" [nzLg]="4" >State</nz-form-label>
                         <nz-form-control  [nzSm]="24" [nzMd]="24" [nzLg]="16" nzSearch>
-                            <nz-select  nzSize="large" formControlName="status">
+                            <nz-select  nzSize="large" formControlName="state">
                                 <nz-option [nzLabel]="'Open'" [nzValue]="'open'"></nz-option>
                                 <nz-option [nzLabel]="'Closed'" [nzValue]="'Closed'"></nz-option>
                             </nz-select>
@@ -47,14 +47,14 @@
                     <nz-form-item>
                         <nz-form-label  [nzSm]="24" [nzMd]="24" [nzLg]="4" nzTooltipTitle="This field is calculated by Hours" nzRequired>Duration</nz-form-label>
                         <nz-form-control  [nzSm]="24" [nzMd]="24" [nzLg]="16" nzSearch>
-                            <nz-input-number  [nzSize]="'large'" [nzMin]="currentDeration"  [nzStep]="0.5" formControlName="deration"></nz-input-number>
+                            <nz-input-number  [nzSize]="'large'" [nzMin]="currentDeration"  [nzStep]="0.5" formControlName="duration"></nz-input-number>
                         </nz-form-control>
                     </nz-form-item>
             
                     <nz-form-item>
                     <nz-form-label  [nzSm]="24" [nzMd]="24" [nzLg]="4" nzRequired>Description</nz-form-label>
                     <nz-form-control   [nzSm]="24" [nzMd]="24" [nzLg]="16" nzErrorTip="Please write something here!">
-                        <textarea formControlName="description" nz-input rows="2" placeholder="description of group" nzSize="large"></textarea>
+                        <textarea formControlName="descreption" nz-input rows="2" placeholder="description of group" nzSize="large"></textarea>
                     </nz-form-control>
                     </nz-form-item>
                 <br><br>
@@ -95,7 +95,7 @@
             <tbody>
             <tr *ngFor="let data of nzTable.data">
                 <td>{{ data.nom }}</td>
-                <td>{{ data.sceanceFormateur }}</td>
+                <td>{{ data.formateur }}</td>
                 <td>{{ data.groupe }}</td>
                 <td>{{ data.dateTimeDebut }}</td>
                 <td>{{ data.dateTimeFin }}</td>

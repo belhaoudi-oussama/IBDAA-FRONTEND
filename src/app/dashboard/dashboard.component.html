@@ -7,35 +7,25 @@
             [nzTrigger]="null">
     <div class="sidebar-logo">
       <a href="https://ng.ant.design/" target="_blank">
-        <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
-        <h1>Ant Design Of Angular</h1>
+        <img src="https://www.norsys.fr/sites/all/themes/custom/norsys/logo.png?v=2" alt="logo">
+        <h1>IBDAA</h1>
       </a>
     </div>
     <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
-      <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
+      <li nz-submenu nzOpen nzTitle="Formation" nzIcon="form">
         <ul>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/welcome">Welcome</a>
+            <a [routerLink]="'formations/view'" (click)="sec('Formations')">Formations</a>
           </li>
           <li nz-menu-item nzMatchRouter>
-            <a>Monitor</a>
-          </li>
-          <li nz-menu-item nzMatchRouter>
-            <a>Workplace</a>
-          </li>
-        </ul>
-      </li>
-      <li nz-submenu nzOpen nzTitle="Form" nzIcon="form">
-        <ul>
-          <li nz-menu-item nzMatchRouter>
-            <a>Basic Form</a>
+            <a [routerLink]="'formations/create'" (click)="manage()" >Manage</a>
           </li>
         </ul>
       </li>
       <li nz-submenu nzOpen nzTitle="Group" nzIcon="team">
         <ul>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/groups">Groups</a>
+            <a [routerLink]="'groups'" (click)="sec('Groups')">Groups</a>
           </li>
         </ul>
       </li>
@@ -50,15 +40,16 @@
                [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
             ></i>
         </span>
+        <a class="hold" (click)="logOut()"><i class="log" nz-icon nzType="logout" nzTheme="outline"></i></a>
       </div>
     </nz-header>
-    <nz-page-header class="site-page-header" nzTitle="Title" nzSubtitle="This is a subtitle">
+    <nz-page-header class="site-page-header" [nzTitle]="Title">
       <nz-breadcrumb nz-page-header-breadcrumb>
-        <nz-breadcrumb-item>First-level Menu</nz-breadcrumb-item>
+        <nz-breadcrumb-item>dashboard</nz-breadcrumb-item>
         <nz-breadcrumb-item>
-          <a>Second-level Menu</a>
+          {{seco}}
         </nz-breadcrumb-item>
-        <nz-breadcrumb-item>Third-level Menu</nz-breadcrumb-item>
+        <nz-breadcrumb-item *ngIf="third">Manage</nz-breadcrumb-item>
       </nz-breadcrumb>
     </nz-page-header>
     <nz-content>

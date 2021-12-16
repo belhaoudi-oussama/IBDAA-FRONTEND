@@ -105,6 +105,13 @@
     width: 100%;
   }
 
+  .log{
+    padding-top: 25px;
+    padding-right: 25px;
+    float: right;
+  }
+
+
   #toRight{
     float: right;
   }

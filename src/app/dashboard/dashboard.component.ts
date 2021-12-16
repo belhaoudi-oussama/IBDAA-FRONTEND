@@ -10,6 +10,9 @@ import { AuthService } from '../services/authentification/auth.service';
 export class DashboardComponent implements OnInit {
   isCollapsed = false;
   user!:Utilisateur;
+  third = false ;
+  seco = "Groups";
+  Title = " Groups"
   constructor(private authService : AuthService) { }
 
   ngOnInit(): void {
@@ -23,4 +26,14 @@ export class DashboardComponent implements OnInit {
 
   logOut(){
     this.authService.logOut();  }
+    
+  manage(){
+      this.third = true;
+  }
+  sec(s : string){
+    this.seco = s;
+    this.Title = s;
+    this.third = false;
+  }
+
 }

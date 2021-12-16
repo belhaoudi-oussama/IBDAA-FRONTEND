@@ -79,7 +79,6 @@ export class CreateGroupComponent implements OnInit {
       newCandidate.type = candidate.type;
       newCandidate.adresse = candidate.adresse ;
       newCandidate.telephone = candidate.phone;
-      newCandidate.formationsCandidat = candidate.formationsCandidat;
       /*if(!candidate.groupe){
         newCandidate.groupe = null;
       }else{
@@ -181,7 +180,6 @@ export class CreateGroupComponent implements OnInit {
             newCandidate.type = candidate.type;
             newCandidate.adresse = candidate.adresse;
             newCandidate.phone = candidate.telephone;
-            newCandidate.formationsCandidat = candidate.formationsCandidat;
             newCandidate.groupe = candidate.groupe;
             return newCandidate
           });

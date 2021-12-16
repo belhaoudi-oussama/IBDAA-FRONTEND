@@ -9,7 +9,6 @@ export interface ICandidate{
     type?: string | null,
     phone? : string | null,
     adresse? : string | null,
-    formationsCandidat?: [],
     groupe?: ReqGroup | null
 
 }

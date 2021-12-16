@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormationService } from 'src/app/services/formation/formation.service';
 import { IFormation } from './IFormation';
 
 
@@ -10,49 +11,10 @@ import { IFormation } from './IFormation';
 export class FormationsComponent implements OnInit {
   searchValue = '';
   visible = false;
-  listOfData: IFormation[] = [
-    {
-      id : 1,
-      name : "F1",
-      descreption : "its A good formation ",
-      duration : 10,
-      state : "available",
-      type : "positive"
-    },
-    {
-      id : 2,
-      name : "F2",
-      descreption : "its A good formation ",
-      duration : 100,
-      state : "available",
-      type : "positive"
-    },
-    {
-      id : 3,
-      name : "F3",
-      descreption : "its A good formation ",
-      duration :30,
-      state : "not available",
-      type : "positive"
-    },
-    {
-      id : 4,
-      name : "F4",
-      descreption : "its A good formation ",
-      duration : 10,
-      state : " not available",
-      type : "positive"
-    },
-    {
-      id : 5,
-      name : "F5",
-      descreption : "stop waiting for bad formation ",
-      duration : 10,
-      state : "available",
-      type : "positive"
-    }
-  ];
+  listOfData: IFormation[] = [];
   listOfDisplayData = [...this.listOfData];
+
+  constructor(private formationService : FormationService) { }
 
   reset(): void {
     this.searchValue = '';
@@ -65,7 +27,13 @@ export class FormationsComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    this.formationService.getFormation().subscribe(
+      next => {
+        console.log(next)
+        this.listOfData = next;
+        this.listOfDisplayData = [...this.listOfData]
+      }
+    );
   }
 
 

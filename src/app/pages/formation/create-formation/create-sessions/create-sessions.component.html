@@ -2,8 +2,8 @@
 <form nz-form [formGroup]="validateForm" id="ngForm1" #detailForm="ngForm">
     <div class="controles-container">  
     <nz-form-item>
-      <nz-form-label [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired nzFor="nom">Nom de sceance</nz-form-label>
-      <nz-form-control [nzSm]="24" [nzMd]="24" [nzLg]="14" nzErrorTip="Nom de sceance est requis !">
+      <nz-form-label [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired nzFor="nom">Name</nz-form-label>
+      <nz-form-control [nzSm]="24" [nzMd]="24" [nzLg]="14" nzErrorTip="Name Required !">
         <input nz-input formControlName="nom" id="nom" />
       </nz-form-control>
     </nz-form-item>
@@ -14,8 +14,8 @@
         </nz-form-control>
       </nz-form-item> -->
       <nz-form-item>
-        <nz-form-label [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired nzFor="formateur">Formateur</nz-form-label>
-        <nz-form-control [nzSm]="24" [nzMd]="24" [nzLg]="14" nzErrorTip="Formateur est requis !">
+        <nz-form-label [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired nzFor="formateur">Former</nz-form-label>
+        <nz-form-control [nzSm]="24" [nzMd]="24" [nzLg]="14" nzErrorTip="Former Required !">
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Selectionner un formateur" formControlName="sceanceFormateur"
             >
                 <nz-option *ngFor="let option of optionList" [nzLabel]="option" [nzValue]="option"></nz-option>
@@ -27,26 +27,28 @@
 
 <div formGroupName="DateGroup">
  <nz-form-item>
-    <nz-form-label [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired nzFor="dateTimeDebut">Date de debut</nz-form-label>
-    <nz-form-control [nzSm]="24" [nzMd]="24" [nzLg]="14" nzErrorTip="Date de debut est requise !">
+    <nz-form-label [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired nzFor="dateTimeDebut">Start DateTime</nz-form-label>
+    <nz-form-control [nzSm]="24" [nzMd]="24" [nzLg]="14" nzErrorTip="Start DateTime Required !">
       <nz-date-picker
       [nzShowTime]="{ nzFormat: 'HH:mm' }"
       nzFormat="yyyy-MM-dd HH:mm"
       formControlName="dateTimeDebut"
       (nzOnOk)="onOk($event)"
+      [(ngModel)]="dateD"
     >
     </nz-date-picker>
 </nz-form-control>
 </nz-form-item>
-
+<input type="hidden" formControlName="drt" [(ngModel)]="dur">
 <nz-form-item>
-    <nz-form-label [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired nzFor="date">Date de fin</nz-form-label>
-    <nz-form-control [nzSm]="24" [nzMd]="24" [nzLg]="14" nzErrorTip="Date de fin est requise !">
+    <nz-form-label [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired nzFor="date">End DateTime</nz-form-label>
+    <nz-form-control [nzSm]="24" [nzMd]="24" [nzLg]="14" nzErrorTip="End DateTime Required !">
       <nz-date-picker
       [nzShowTime]="{ nzFormat: 'HH:mm' }"
       nzFormat="yyyy-MM-dd HH:mm"
       formControlName="dateTimeFin"
       (nzOnOk)="onOk($event)"
+      [(ngModel)]="dateF"
     >
     </nz-date-picker>
   <br>
@@ -57,8 +59,8 @@
 </nz-form-item>
 </div>
 <nz-form-item>
-    <nz-form-label [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired nzFor="formateur">Groupe</nz-form-label>
-    <nz-form-control [nzSm]="24" [nzMd]="24" [nzLg]="14" nzErrorTip="Formateur est requis !">
+    <nz-form-label [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired nzFor="formateur">Group</nz-form-label>
+    <nz-form-control [nzSm]="24" [nzMd]="24" [nzLg]="14" nzErrorTip="Group Required !">
         <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Selectionner un groupe" formControlName="groupe" >
             <nz-option *ngFor="let option of groupsNames" [nzLabel]="option" [nzValue]="option" 
             ></nz-option>
@@ -70,9 +72,10 @@
 
 
       <div fxLayout="row"  fxLayoutAlign="end end">
-        <a nz-button nzType="primary" [disabled]="!validateForm.valid" form="ngForm" value="Save" (click)="saveSeance()" >Ajouter</a>
+        <a nz-button nzType="primary" [disabled]="!validateForm.valid" form="ngForm" value="Save" (click)="saveSeance()" >Add</a>
     </div>
 </div>
+  
   </form>
 
   <div class="list-cadidate-container" fxLayout="row"  fxFlex="auto" nz-row>
@@ -88,7 +91,7 @@
      <nz-list-item *ngFor="let sceance of listSceance">
           <nz-list-item-meta
             nzAvatar="https://cutt.ly/HQxU03g"
-            nzDescription={{sceance?.sceanceFormateur}}
+            nzDescription={{sceance?.formateur}}
           >
             <nz-list-item-meta-title>
                 {{sceance?.nom}}

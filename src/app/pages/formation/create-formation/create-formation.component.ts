@@ -7,6 +7,8 @@ import { NzTabPosition } from 'ng-zorro-antd/tabs';
 import { ISession } from './session';
 import { SessionManagementService } from './session-management.service'
 import { Sceance } from '../../group/groups/Sceance';
+import { IFormation } from '../formations/IFormation';
+import { FormationService } from 'src/app/services/formation/formation.service';
 
 @Component({
   selector: 'app-create-formation',
@@ -24,7 +26,7 @@ export class CreateFormationComponent implements OnInit {
 
   listOfDisplayData = [...this.listOfData];
 
-  constructor( private fb: FormBuilder ,private drawerService: NzDrawerService , private sessionService : SessionManagementService) { 
+  constructor( private fb: FormBuilder ,private drawerService: NzDrawerService , private sessionService : SessionManagementService , private formationService : FormationService) { 
     
   }
 
@@ -45,9 +47,9 @@ export class CreateFormationComponent implements OnInit {
       search : [''],
       name: ['', [Validators.required],[this.groupNameValidator]],
       type : ['pre'],
-      status : ['open'],
-      deration : [this.currentDeration,[Validators.required]],
-      description: ['', [Validators.required]]
+      state : ['open'],
+      duration : [this.currentDeration,[Validators.required]],
+      descreption: ['', [Validators.required]]
     });
     this.sessionService.sessionList$.subscribe(
       data => {
@@ -58,13 +60,18 @@ export class CreateFormationComponent implements OnInit {
       }
     )
   }
-  submitForm(value: { groupName: string; description: string; search: string;}): void {
+  submitForm(value: IFormation): void {
+    value.formationSceances = this.listOfData;
+    delete value['search'];
+    this.formationService.createFormation(value);
+    
     for (const key in this.formationForm.controls) {
       if (this.formationForm.controls.hasOwnProperty(key)) {
         this.formationForm.controls[key].markAsDirty();
         this.formationForm.controls[key].updateValueAndValidity();
       }
     }
+    this.formationForm.reset();
   }
 
   openCreateGroupComponent(): void {
@@ -74,7 +81,7 @@ export class CreateFormationComponent implements OnInit {
     nzMaskClosable:false,
     nzWidth : "50%",
     nzContentParams: {
-      value : this.formationForm.value.deration
+      value : this.formationForm.value.duration
     }
   });
 }

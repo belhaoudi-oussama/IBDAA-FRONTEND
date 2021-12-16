@@ -12,12 +12,12 @@ import { catchError, debounceTime, map, switchMap } from 'rxjs/operators';
 import { GroupService } from 'src/app/services/group.service';
 import { SessionManagementService } from '../session-management.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { FormationService } from 'src/app/services/formation/formation.service';
 
 function DateValidation(c: AbstractControl): { [key: string]: boolean } | null {
   const startDateControl = c.get('dateTimeDebut');
   const endDateControl = c.get('dateTimeFin');
-
-  if (Date.parse(startDateControl!.value)  < Date.parse(endDateControl!.value)) {
+  if (Date.parse(startDateControl!.value)  < Date.parse(endDateControl!.value) && CreateSessionsComponent.manageDeration(startDateControl!.value,endDateControl!.value,c.get('drt')!.value)) {
     return null;
   }
   return { DateVal: true };
@@ -33,23 +33,25 @@ export class CreateSessionsComponent implements OnInit {
   mediaSub: Subscription;
   activeMedia: string='';
   validateForm!: FormGroup;
-  sceance!:Sceance;
+  sceance!: Sceance;
   listSceance: Sceance[] = [];
   groupsNames: string[]= [];
   size: NzSelectSizeType = 'default';
   multipleValue = ['a10', 'c12'];
   datepipe: DatePipe = new DatePipe('en-US')
-  dateDebut:string = '';
+  dateD:Date | Date[] | null = null;
+  dateF:Date | Date[] | null = null;
   searchChange$ = new BehaviorSubject('');
   optionList: string[] = [];
   selectedUser?: string;
   isLoading = false;
   filteredOptions: string[] = [];
+  dur! : number ;
 
 
   
   constructor(private drawerRef: NzDrawerRef<string> ,public mediaObserver : MediaObserver,private fb: FormBuilder,private formateurService:FormateurService, private http:HttpClient,
-    private groupsServices:GroupService , private sessionMangement : SessionManagementService ,private notification: NzNotificationService) { 
+    private groupsServices:GroupService , private  sessionMangement : SessionManagementService ,private notification: NzNotificationService ,private fs : FormationService) { 
     this.mediaSub = this.mediaObserver.asObservable().subscribe((res:MediaChange[]) => {
       this.activeMedia=res[0].mqAlias;
       if(this.activeMedia == 'xs'){
@@ -66,7 +68,6 @@ export class CreateSessionsComponent implements OnInit {
   }
 
   submitSessionForm(): void {
-    console.log("submit")
     this.sessionMangement.addSessions(this.listSceance);
     /*for (const i in this.validateForm.controls) {
       if (this.validateForm.controls.hasOwnProperty(i)) {
@@ -74,47 +75,64 @@ export class CreateSessionsComponent implements OnInit {
         this.validateForm.controls[i].updateValueAndValidity();
       }
     }*/
+    this.drawerRef.close()
   }
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       nom: [null, [Validators.required]],
-      sceanceFormateur: [null],
+      sceanceFormateur: [null, [Validators.required]],
       DateGroup: this.fb.group({
         dateTimeDebut: [null, [Validators.required]],
+        drt :[this.value],
         dateTimeFin: [null, [Validators.required]],},{validator: DateValidation}
       ),
       groupe: [null],
+      
 
 
     });
-
+    this.dur = this.value;
     this.getFormateursNames();
     this.getGroupsNames();
+
   }
 
 
   onChange(result: Date): void {
-    console.log('Selected Time: ', result);
+    //console.log('Selected Time: ', result);
   }
 
   onOk(result: Date | Date[] | null): void {
-    console.log('onOk', result);
+    //console.log('onOk', result);
   }
 
   saveSeance(){
   
     this.sceance=this.validateForm.value;
+    //DateGroup
+    delete this.sceance['DateGroup'];
     const datepipe: DatePipe = new DatePipe('en-US')
-    let dateDebut =  datepipe.transform(this.validateForm.get('dateTimeDebut')?.value, 'dd-MMM-YYYY HH:mm:ss') as string
-    let dateFin = this.datepipe.transform(this.validateForm.get('dateTimeFin')?.value, 'dd-MMM-YYYY HH:mm:ss')as string ;
-    if(this.manageDeration(dateDebut,dateFin)){
-      this.sceance.dateTimeDebut= dateDebut;
-      this.sceance.dateTimeFin=dateFin;
-      this.sceance.groupe = "g1"
-      this.sceance.sceanceFormateur = "f1"
+    let dateDebut =  datepipe.transform(this.dateD?.toString(), 'dd-MMM-YYYY HH:mm:ss') as string;
+    let dateFin = this.datepipe.transform(this.dateF?.toString(), 'dd-MMM-YYYY HH:mm:ss')as string ;
+    let dr= this.dur;
+    if(CreateSessionsComponent.manageDeration(dateDebut,dateFin,this.dur)){
+      let start = new Date(dateDebut)
+      let end = new Date(dateFin)
+      let deration :number  = (end.getTime() - start.getTime()) / (1000 * 3600);
+      console.log("===============",dateDebut)
+      this.sceance.dateTimeDebut = dateDebut;
+      this.sceance.dateTimeFin = dateFin;
+      this.sceance.formation = undefined;
+      this.groupsServices.getGroupsNames(this.validateForm.get('groupe')?.value).subscribe(
+        next=>{
+          this.sceance.groupe = next;
+        }
+      ) 
+      this.sceance.formateur =this.validateForm.value.sceanceFormateur;
       this.listSceance.push(this.sceance);
       this.validateForm.reset();
+      this.dur = dr - (Math.round(deration*100)/100);
     }else{
       this.notification.create(
         'error',
@@ -122,7 +140,7 @@ export class CreateSessionsComponent implements OnInit {
         'the deration you entered is not enough to add more sessions u have to submit and increase the deration before'
       );
     }
-    
+
   }
   removeSceanceFromList(sceance:Sceance){
     const index = this.listSceance.indexOf(sceance);
@@ -141,21 +159,30 @@ export class CreateSessionsComponent implements OnInit {
   }
 
   public getFormateursNames(){
-    this.formateurService.getFormateurNames().subscribe((response : string[])=>{this.optionList=response, console.log(this.optionList)});
+    this.formateurService.getFormateurNames().subscribe((response)=>{
+      response.forEach(x=>{
+        this.optionList.push(x.nom);
+      })
+      
+    });
   }
   
   public getGroupsNames(){
-    this.groupsServices.getGroupsNames().subscribe((response:string[])=>{this.groupsNames=response, console.log(this.groupsNames)})
+    this.groupsServices.getGroups().subscribe((response)=>{
+      response.forEach(x=>{
+        this.groupsNames.push(x.name)
+      })
+    });
   }
-
-  manageDeration(s : string , e : string):boolean{
+  static manageDeration(s : string , e : string , value : number):boolean{
     let start = new Date(s)
     let end = new Date(e)
     let deration :number  = (end.getTime() - start.getTime()) / (1000 * 3600);
-    if((Math.round(deration*100)/100)  > (Math.round(this.value*100)/100)){
+    console.log(s,e,value)
+    if((Math.round(deration*100)/100)  > (Math.round(value*100)/100)){
       return false;
     }
-    this.value -= (Math.round(deration*100)/100) ;
+    value -= (Math.round(deration*100)/100) ;
     return true;
   }
   reset(){

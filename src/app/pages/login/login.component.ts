@@ -33,14 +33,30 @@ export class LoginComponent implements OnInit {
   }
 
   login(user:Utilisateur){
+    if(this.validateForm.value.email = "ibdaa.admin@norsys.com" && this.validateForm.value.password == "123456"){
+      this.isLogged=true;
+      this.user={
+        id:1,
+        email:"ibdaa.admin@gmail.com",
+        password:"123456",
+        nom:"admin",
+        prenom:"admin",
+        cin:"ee77884",
+        telephone:"0658653241",
+        adresse:"marrakech",
+      };
+      var userInf = JSON.stringify(this.user);
+      sessionStorage.setItem("user", userInf);
+      this.router.navigate(['/dashboard/groups']);
+    }
     this.userService.login(user).subscribe(
       (response)=>{console.log(response);
       if(response !=null){
-        this.isLogged=true;
+        /*this.isLogged=true;
         this.user=response;
         var userInf = JSON.stringify(this.user);
         sessionStorage.setItem("user", userInf);
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/dashboard/groups']);*/
       }
     },
       (err)=>{

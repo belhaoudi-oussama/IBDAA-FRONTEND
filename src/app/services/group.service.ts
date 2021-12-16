@@ -20,7 +20,6 @@ function mapCandidate(candidates : ReqCandidate[]) : ICandidate[]{
     newCandidate.type = candidate.type;
     newCandidate.adresse = candidate.adresse;
     newCandidate.phone = candidate.telephone;
-    newCandidate.formationsCandidat = candidate.formationsCandidat;
     newCandidate.groupe = candidate.groupe;
     return newCandidate
   });
@@ -63,8 +62,18 @@ export class GroupService {
     return this.http.get<ReqGroup>(`${this.proxy+ this.groupApi}/id/${id}`);
   }
   
-  getGroupsNames() : Observable<string[]>{
-    return this.http.get<string[]>(`${this.proxy + this.groupApi}/getGroupeNames`)
+  getGroupsNames(name : String) : Observable<IGroup>{
+    return this.http.get<any>(`${this.proxy + this.groupApi}/name/${name}`).pipe(
+      map( (group : ReqGroup)=>{
+        return {
+          id : group.id ? group.id : -1,
+          name : group.nom,
+          description : group.description,
+          candidates : mapCandidate(group.candidats),
+          sessions : group.sceances,
+        };
+      })
+    )
   }
   groupExist(group : string): Observable<boolean>{
     return this.http.get<boolean>(`${this.proxy + this.groupApi}/checkgroup/${group}`)
@@ -74,11 +83,15 @@ export class GroupService {
   }
   editGroup(group : ReqGroup){
     group.sceances=null;
-    console.log(group)
     this.http.put<any>(`${this.proxy + this.groupApi}`,  group).subscribe();
   }
   deleteGroup(group : ReqGroup){
-    this.http.delete<any>(`${this.proxy + this.groupApi}/${group.id}`).subscribe();
+    this.http.delete<any>(`${this.proxy + this.groupApi}`,{
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      body: group
+    }).subscribe();
   }
   searchCandidate(name : string): Observable<ICandidate[]>{
     return this.http.get<ReqCandidate[]>(`${this.proxy + this.candidateApi}/name/${name}`).pipe(
